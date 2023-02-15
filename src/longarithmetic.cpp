@@ -223,7 +223,10 @@ void LongArithmetic::mul(const char* v1, const char* v2, char* result) const
 void LongArithmetic::factorial(const char* v, char** result) const
 {
     const uint64_t maxSize = 5000000;
+
     *result = new char[maxSize + 1];
+    memset(*result, 0, maxSize + 1);
+
     if (!strcmp(v, "0") || !strcmp(v, "1"))
     {
         (*result)[0] = '1';
