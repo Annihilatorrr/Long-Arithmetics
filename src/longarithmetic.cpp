@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <memory>
-
+#include <cstring>
 void LongArithmetic::addUnsigned(const char* v1, const char* v2, char* result) const
 {
     const char* ptr1 = v1 + strlen(v1) - 1;

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <cassert>
+#include <cstring>
 #include "longarithmetic.h"
 
 void testAdd()
@@ -33,6 +34,7 @@ void testAdd()
         const char* v2 = "98";
         const uint64_t maxSize = std::max(strlen(v1), strlen(v2));
         const auto result = std::make_shared<char[]>(maxSize + 2);
+        memset(result.get(), 0, maxSize + 2);
         const LongArithmetic la;
         la.add(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("1097"));
@@ -73,6 +75,7 @@ void testAdd()
         const char* v2 = "999";
         const uint64_t maxSize = std::max(strlen(v1), strlen(v2));
         const auto result = std::make_shared<char[]>(maxSize + 2);
+        memset(result.get(), 0, maxSize + 2);
         const LongArithmetic la;
         la.add(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("901"));
@@ -136,6 +139,7 @@ void testSub()
         const char* v2 = "98";
         const uint64_t maxSize = std::max(strlen(v1), strlen(v2));
         const auto result = std::make_shared<char[]>(maxSize + 3);
+        memset(result.get(), 0, maxSize + 3);
         const LongArithmetic la;
         la.sub(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("-1097"));
@@ -146,6 +150,7 @@ void testSub()
         const char* v2 = "-999";
         const uint64_t maxSize = std::max(strlen(v1), strlen(v2));
         const auto result = std::make_shared<char[]>(maxSize + 3);
+        memset(result.get(), 0, maxSize + 3);
         const LongArithmetic la;
         la.sub(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("1097"));
@@ -166,6 +171,7 @@ void testSub()
         const char* v2 = "-98";
         const uint64_t maxSize = std::max(strlen(v1), strlen(v2));
         const auto result = std::make_shared<char[]>(maxSize + 3);
+        memset(result.get(), 0, maxSize + 3);
         const LongArithmetic la;
         la.sub(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("1097"));
@@ -218,6 +224,7 @@ void testMul()
         const char* v2 = "123456789012345678901234567890";
         const uint64_t maxSize = strlen(v1) + strlen(v2) + 3;
         const auto result = std::make_shared<char[]>(maxSize + 2);
+        memset(result.get(), 0, maxSize + 2);
         const LongArithmetic la;
         la.mul(v1, v2, result.get());
         assert(std::string(result.get()) == std::string("15241578753238836750495351562536198787501905199875019052100"));
@@ -291,6 +298,7 @@ void testPower()
         const int n = 2;
         const uint64_t maxSize = strlen(v1) * n;
         const auto result = std::make_shared<char[]>(maxSize + 2);
+        memset(result.get(), 0, maxSize + 2);
         const LongArithmetic la;
         la.pow(v1, n, result.get());
         assert(std::string(result.get()) == std::string("2500"));

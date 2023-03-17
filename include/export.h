@@ -4,6 +4,6 @@
 #    else
 #        define LIBRARY_API __declspec(dllimport)
 #    endif
-#elif
-#    define LIBRARY_API
+#else
+#define LIBRARY_API
 #endif
