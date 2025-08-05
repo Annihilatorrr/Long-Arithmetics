@@ -5,12 +5,12 @@ class LIBRARY_API LongArithmetic
 {
     void reverse(char* result) const;
     void addReversedAndAssign(char* v1, const char* v2) const;
-    void addUnsigned(const char* v1, const char* v2, char* result) const;
+    std::string addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult = false) const;
     void subUnsigned(const char* v1, const char* v2, char* result) const;
     void mulUnsigned(const char* v1, const char* v2, char* result) const;
 
 public:
-    void add(const char* v1, const char* v2, char* result) const;
+    std::string add(const char* v1, const char* v2) const;
     void sub(const char* v1, const char* v2, char* result) const;
     void mul(const char* v1, const char* v2, char* result) const;
     void pow(const char* v1, int n, char* result) const;

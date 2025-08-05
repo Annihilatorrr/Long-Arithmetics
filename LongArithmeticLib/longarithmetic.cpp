@@ -3,38 +3,36 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
-void LongArithmetic::addUnsigned(const char* v1, const char* v2, char* result) const
+LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult) const
 {
-    const char* ptr1 = v1 + strlen(v1) - 1;
-    const char* ptr2 = v2 + strlen(v2) - 1;
-    char* resultPtr = result;
-    unsigned char mem = 0;
+    std::string result;
+    result.reserve(std::max(v1.size(), v2.size()) + 1 + negativeResult ? 1 : 0); // максимум + 1 на перенос
 
-    while (ptr2 >= v2 || mem)
-    {
-        unsigned char res = 0;
-        if (ptr1 >= v1)
+    int carry = 0;
+    int i = static_cast<int>(v1.size()) - 1;
+    int j = static_cast<int>(v2.size()) - 1;
 
-        {
-            res += (*ptr1) - 0x30;
-        }
+    while (i >= 0 || j >= 0 || carry > 0) {
+        int digit1 = (i >= 0 && std::isdigit(v1[i])) ? v1[i] - '0' : 0;
+        int digit2 = (j >= 0 && std::isdigit(v2[j])) ? v2[j] - '0' : 0;
 
-        if (ptr2 >= v2)
-        {
-            res += (*ptr2) - 0x30;
-        }
+        int sum = digit1 + digit2 + carry;
+        result.push_back(static_cast<char>((sum % 10) + '0'));
+        carry = sum / 10;
 
-        res += mem;
-        const char remainder = res % 10;
-        *resultPtr = remainder + 0x30;
-        ++resultPtr;
-        mem = res / 10;
-        --ptr1;
-        --ptr2;
+        --i;
+        --j;
     }
-    reverse(result);
+
+    if (negativeResult && result != "0")
+    {
+        result.push_back('-');
+    }
+    std::reverse(result.begin(), result.end());
+    return result;
 }
-int LongArithmetic::compare(const char* v1, const char* v2) const
+
+LIBRARY_API int LongArithmetic::compare(const char* v1, const char* v2) const
 {
     if (strlen(v1) > strlen(v2))
     {
@@ -60,7 +58,7 @@ int LongArithmetic::compare(const char* v1, const char* v2) const
     return 0;
 }
 
-void LongArithmetic::reverse(char* result) const
+LIBRARY_API void LongArithmetic::reverse(char* result) const
 {
     const auto length = strlen(result);
     for (int i = 0; i < length / 2; ++i)
@@ -71,7 +69,7 @@ void LongArithmetic::reverse(char* result) const
     }
 }
 
-void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) const
+LIBRARY_API void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) const
 {
     char* ptr1 = v1;
     const char* ptr2 = v2;
@@ -104,52 +102,51 @@ void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) const
     }
 }
 
-void LongArithmetic::add(const char* v1, const char* v2, char* result) const
+LIBRARY_API std::string LongArithmetic::add(const char* v1, const char* v2) const
 {
     // both are positive
     if (v1[0] != '-' && v2[0] != '-')
     {
-        addUnsigned(v1, v2, result);
+        return addUnsigned(v1, v2);
     }
 
     // both are negative
     else if (v1[0] == '-' && v2[0] == '-')
     {
-        addUnsigned(v1 + 1, v2 + 1, result + 1);
-        result[0] = '-';
+        return addUnsigned(v1 + 1, v2 + 1, true);
     }
 
-    // positive and negative
-    else if (v1[0] != '-' && v2[0] == '-')
-    {
-        if (compare(v1, v2 + 1) != -1)
-        {
-            sub(v1, v2 + 1, result);
-        }
-        else
-        {
-            sub(v2 + 1, v1, result + 1);
-            result[0] = '-';
+    // // positive and negative
+    // else if (v1[0] != '-' && v2[0] == '-')
+    // {
+    //     if (compare(v1, v2 + 1) != -1)
+    //     {
+    //         sub(v1, v2 + 1, result);    
+    //     }
+    //     else
+    //     {
+    //         sub(v2 + 1, v1, result + 1);
+    //         result[0] = '-';
 
-        }
-    }
+    //     }
+    // }
 
-    // negative and positive 
-    else if (v1[0] == '-' && v2[0] != '-')
-    {
-        if (compare(v1 + 1, v2) != 1)
-        {
-            sub(v2, v1 + 1, result);
-        }
-        else
-        {
-            sub(v1 + 1, v2, result + 1);
-            result[0] = '-';
-        }
-    }
+    // // negative and positive 
+    // else if (v1[0] == '-' && v2[0] != '-')
+    // {
+    //     if (compare(v1 + 1, v2) != 1)
+    //     {
+    //         sub(v2, v1 + 1, result);
+    //     }
+    //     else
+    //     {
+    //         sub(v1 + 1, v2, result + 1);
+    //         result[0] = '-';
+    //     }
+    // }
 }
 
-void LongArithmetic::sub(const char* v1, const char* v2, char* result) const
+LIBRARY_API  void LongArithmetic::sub(const char* v1, const char* v2, char* result) const
 {
     // both are positive
     if (v1[0] != '-' && v2[0] != '-')
@@ -194,7 +191,7 @@ void LongArithmetic::sub(const char* v1, const char* v2, char* result) const
     }
 }
 
-void LongArithmetic::mul(const char* v1, const char* v2, char* result) const
+LIBRARY_API void LongArithmetic::mul(const char* v1, const char* v2, char* result) const
 {
     // both are positive
     if ((v1[0] != '-' && v2[0] != '-'))
@@ -220,7 +217,7 @@ void LongArithmetic::mul(const char* v1, const char* v2, char* result) const
     }
 }
 
-void LongArithmetic::factorial(const char* v, char** result) const
+LIBRARY_API void LongArithmetic::factorial(const char* v, char** result) const
 {
     const uint64_t maxSize = 5000000;
 
@@ -259,7 +256,7 @@ void LongArithmetic::factorial(const char* v, char** result) const
 
 }
 
-void LongArithmetic::pow(const char* v1, int n, char* result) const
+LIBRARY_API void LongArithmetic::pow(const char* v1, int n, char* result) const
 {
     if (n == 0)
     {
@@ -311,7 +308,7 @@ void LongArithmetic::pow(const char* v1, int n, char* result) const
     }
 }
 
-void LongArithmetic::subUnsigned(const char* v1, const char* v2, char* result) const
+LIBRARY_API void LongArithmetic::subUnsigned(const char* v1, const char* v2, char* result) const
 {
     const char* ptr1 = v1 + strlen(v1) - 1;
     const char* ptr2 = v2 + strlen(v2) - 1;
@@ -357,7 +354,7 @@ void LongArithmetic::subUnsigned(const char* v1, const char* v2, char* result) c
     reverse(result);
 }
 
-void LongArithmetic::mulUnsigned(const char* v1, const char* v2, char* result) const
+LIBRARY_API void LongArithmetic::mulUnsigned(const char* v1, const char* v2, char* result) const
 {
     const char* ptrV1 = v1 + strlen(v1) - 1;
     const char* ptrV2 = v2 + strlen(v2) - 1;
