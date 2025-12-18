@@ -5,14 +5,17 @@
 #include <cstring>
 #include <vector>
 
-static std::string stripLeadingZeros(const std::string& str) {
+static std::string stripLeadingZeros(const std::string &str)
+{
     size_t i = 0;
-    while (i < str.length() && str[i] == '0') {
+    while (i < str.length() && str[i] == '0')
+    {
         ++i;
     }
 
     // Если остались цифры после нулей — вернём хвост
-    if (i < str.length()) {
+    if (i < str.length())
+    {
         return str.substr(i);
     }
 
@@ -20,8 +23,7 @@ static std::string stripLeadingZeros(const std::string& str) {
     return "0";
 }
 
-
-LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult) const
+LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string &v1, const std::string &v2, bool negativeResult) const
 {
     std::string result;
     result.reserve(std::max(v1.size(), v2.size()) + 1 + negativeResult ? 1 : 0); // максимум + 1 на перенос
@@ -30,7 +32,8 @@ LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const
     int i = static_cast<int>(v1.size()) - 1;
     int j = static_cast<int>(v2.size()) - 1;
 
-    while (i >= 0 || j >= 0 || carry > 0) {
+    while (i >= 0 || j >= 0 || carry > 0)
+    {
         int digit1 = (i >= 0 && std::isdigit(v1[i])) ? v1[i] - '0' : 0;
         int digit2 = (j >= 0 && std::isdigit(v2[j])) ? v2[j] - '0' : 0;
 
@@ -50,7 +53,7 @@ LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const
     return result;
 }
 
-LIBRARY_API int LongArithmetic::compare(const std::string& v1, const std::string& v2) const
+LIBRARY_API int LongArithmetic::compare(const std::string &v1, const std::string &v2) const
 {
     // Обрабатываем знаки
     bool neg1 = (!v1.empty() && v1[0] == '-');
@@ -66,25 +69,31 @@ LIBRARY_API int LongArithmetic::compare(const std::string& v1, const std::string
     size_t len2 = num2.length();
 
     // Разные знаки: отрицательное всегда меньше положительного
-    if (neg1 && !neg2) return -1;
-    if (!neg1 && neg2) return 1;
+    if (neg1 && !neg2)
+        return -1;
+    if (!neg1 && neg2)
+        return 1;
 
     // Оба положительные или оба отрицательные
     int sign = neg1 ? -1 : 1;
 
-    if (len1 > len2) return 1 * sign;
-    if (len2 > len1) return -1 * sign;
+    if (len1 > len2)
+        return 1 * sign;
+    if (len2 > len1)
+        return -1 * sign;
 
-    for (size_t i = 0; i < len1; ++i) {
-        if (num1[i] > num2[i]) return 1 * sign;
-        if (num1[i] < num2[i]) return -1 * sign;
+    for (size_t i = 0; i < len1; ++i)
+    {
+        if (num1[i] > num2[i])
+            return 1 * sign;
+        if (num1[i] < num2[i])
+            return -1 * sign;
     }
 
     return 0; // Равны
 }
 
-
-LIBRARY_API void LongArithmetic::reverse(char* result) const
+LIBRARY_API void LongArithmetic::reverse(char *result) const
 {
     const auto length = strlen(result);
     for (int i = 0; i < length / 2; ++i)
@@ -95,10 +104,10 @@ LIBRARY_API void LongArithmetic::reverse(char* result) const
     }
 }
 
-LIBRARY_API void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) const
+LIBRARY_API void LongArithmetic::addReversedAndAssign(char *v1, const char *v2) const
 {
-    char* ptr1 = v1;
-    const char* ptr2 = v2;
+    char *ptr1 = v1;
+    const char *ptr2 = v2;
     unsigned char mem = 0;
 
     while (*ptr2 != 0)
@@ -128,19 +137,23 @@ LIBRARY_API void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) 
     }
 }
 
-LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::string& v2) const
+LIBRARY_API std::string LongArithmetic::add(const std::string &v1, const std::string &v2) const
 {
-    auto isNegative = [](const std::string& val) {
+    auto isNegative = [](const std::string &val)
+    {
         return !val.empty() && val[0] == '-';
     };
 
-    auto stripSign = [=](const std::string& val) {
+    auto stripSign = [=](const std::string &val)
+    {
         return isNegative(val) ? val.substr(1) : val;
     };
 
-    auto normalizeZero = [](const std::string& result) {
+    auto normalizeZero = [](const std::string &result)
+    {
         size_t start = (result[0] == '-') ? 1 : 0;
-        for (size_t i = start; i < result.size(); ++i) {
+        for (size_t i = start; i < result.size(); ++i)
+        {
             if (result[i] != '0')
                 return result;
         }
@@ -156,15 +169,18 @@ LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::st
     std::string result;
 
     // оба положительные
-    if (!neg1 && !neg2) {
+    if (!neg1 && !neg2)
+    {
         result = addUnsigned(abs1, abs2);
     }
     // оба отрицательные
-    else if (neg1 && neg2) {
+    else if (neg1 && neg2)
+    {
         result = "-" + addUnsigned(abs1, abs2);
     }
     // v1 положительное, v2 отрицательное
-    else if (!neg1 && neg2) {
+    else if (!neg1 && neg2)
+    {
         int cmp = compare(abs1, abs2);
         if (cmp >= 0)
             result = sub(abs1, abs2);
@@ -172,7 +188,8 @@ LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::st
             result = "-" + sub(abs2, abs1);
     }
     // v1 отрицательное, v2 положительное
-    else {
+    else
+    {
         int cmp = compare(abs1, abs2);
         if (cmp > 0)
             result = "-" + sub(abs1, abs2);
@@ -183,48 +200,70 @@ LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::st
     return normalizeZero(result);
 }
 
-
-
-LIBRARY_API std::string LongArithmetic::sub(const std::string& v1, const std::string& v2) const 
+LIBRARY_API std::string LongArithmetic::sub(const std::string &v1, const std::string &v2) const
 {
     std::string result;
 
+    auto normalizeZero = [](const std::string &value)
+    {
+        if (value.empty())
+            return std::string("0");
+        size_t start = (value[0] == '-') ? 1 : 0;
+        for (size_t i = start; i < value.size(); ++i)
+        {
+            if (value[i] != '0')
+                return value;
+        }
+        return std::string("0");
+    };
+
     // оба положительные
-    if (v1[0] != '-' && v2[0] != '-') {
+    if (v1[0] != '-' && v2[0] != '-')
+    {
         int cmp = compare(v1, v2);
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             result = "0";
         }
-        else if (cmp < 0) {
+        else if (cmp < 0)
+        {
             result = "-" + subUnsigned(v2, v1);
         }
-        else {
+        else
+        {
             result = subUnsigned(v1, v2);
         }
     }
     // оба отрицательные
-    else if (v1[0] == '-' && v2[0] == '-') {
-        if (compare(v1.substr(1), v2.substr(1)) != 1) {
+    else if (v1[0] == '-' && v2[0] == '-')
+    {
+        if (compare(v1.substr(1), v2.substr(1)) != 1)
+        {
             result = subUnsigned(v2.substr(1), v1.substr(1));
-        } else {
+        }
+        else
+        {
             result = "-" + subUnsigned(v1.substr(1), v2.substr(1));
         }
     }
     // v1 отрицательное, v2 положительное
-    else if (v1[0] == '-' && v2[0] != '-') {
+    else if (v1[0] == '-' && v2[0] != '-')
+    {
         result = "-" + addUnsigned(v1.substr(1), v2);
     }
     // v1 положительное, v2 отрицательное
-    else if (v1[0] != '-' && v2[0] == '-') {
+    else if (v1[0] != '-' && v2[0] == '-')
+    {
         result = addUnsigned(v1, v2.substr(1));
     }
 
-    return result;
+    return normalizeZero(result);
 }
 
-
-std::string LongArithmetic::mul(const std::string& v1, const std::string& v2) const {
-    if (v1 == "0" || v2 == "0") return "0";
+std::string LongArithmetic::mul(const std::string &v1, const std::string &v2) const
+{
+    if (v1 == "0" || v2 == "0")
+        return "0";
 
     bool neg1 = !v1.empty() && v1[0] == '-';
     bool neg2 = !v2.empty() && v2[0] == '-';
@@ -240,33 +279,47 @@ std::string LongArithmetic::mul(const std::string& v1, const std::string& v2) co
 
     return result;
 }
-// std::string LongArithmetic::factorial(const std::string& value) const
-// {
-//     std::string input = stripLeadingZeros(value);
 
-//     if (input == "0" || input == "1") {
-//         return "1";
-//     }
+LIBRARY_API std::string LongArithmetic::factorial(const std::string &value) const
+{
+    if (value.empty())
+        throw std::invalid_argument("Empty value");
 
-//     std::string current = input;
-//     std::string tempResult = input;
-//     std::string next;
-//     std::string result;
+    bool isNegative = (value[0] == '-');
+    std::string input = isNegative ? value.substr(1) : value;
 
-//     while (current != "1") {
-//         subUnsigned(current, "1", next);              // next = current - 1
-//         mulUnsigned(tempResult., next, result);        // result = tempResult * next
-//         current = next;
-//         tempResult = result;
-//     }
+    input = stripLeadingZeros(input);
 
-//     return result;
-// }
+    for (char c : input)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(c)))
+            throw std::invalid_argument("Invalid digit in value");
+    }
+
+    // Treat "-0" as 0, but reject other negative values.
+    if (isNegative && input != "0")
+        throw std::invalid_argument("Negative factorial not supported");
+
+    if (input == "0" || input == "1")
+        return "1";
+
+    std::string result = "1";
+    std::string current = input;
+
+    // Multiply down: n * (n-1) * ... * 2
+    while (current != "1")
+    {
+        result = mul(result, current);
+        current = subUnsigned(current, "1");
+    }
+
+    return result;
+}
 
 #include <string>
 #include <memory>
 
-LIBRARY_API std::string LongArithmetic::pow(const std::string& v1, int n) const
+LIBRARY_API std::string LongArithmetic::pow(const std::string &v1, int n) const
 {
     if (n < 0)
         throw std::invalid_argument("Negative exponent not supported");
@@ -304,10 +357,7 @@ LIBRARY_API std::string LongArithmetic::pow(const std::string& v1, int n) const
     return result;
 }
 
-
-
-
-LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string& v1, const std::string& v2) const
+LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string &v1, const std::string &v2) const
 {
     std::string result;
     int carry = 0;
@@ -315,16 +365,20 @@ LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string& v1, const
     int i = static_cast<int>(v1.length()) - 1;
     int j = static_cast<int>(v2.length()) - 1;
 
-    while (i >= 0 || j >= 0) {
+    while (i >= 0 || j >= 0)
+    {
         int digit1 = i >= 0 ? v1[i] - '0' : 0;
         int digit2 = j >= 0 ? v2[j] - '0' : 0;
 
         int res = digit1 - digit2 - carry;
 
-        if (res < 0) {
+        if (res < 0)
+        {
             res += 10;
             carry = 1;
-        } else {
+        }
+        else
+        {
             carry = 0;
         }
 
@@ -333,7 +387,8 @@ LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string& v1, const
         --j;
     }
 
-    while (result.length() > 1 && result.back() == '0') {
+    while (result.length() > 1 && result.back() == '0')
+    {
         result.pop_back();
     }
 
@@ -341,16 +396,18 @@ LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string& v1, const
     return result;
 }
 
-
-std::string LongArithmetic::mulUnsigned(const std::string& v1, const std::string& v2) const {
+std::string LongArithmetic::mulUnsigned(const std::string &v1, const std::string &v2) const
+{
     int n1 = v1.size();
     int n2 = v2.size();
     std::vector<int> res(n1 + n2, 0);
 
-    for (int i = n1 - 1; i >= 0; --i) {
+    for (int i = n1 - 1; i >= 0; --i)
+    {
         int d1 = v1[i] - '0';
         int carry = 0;
-        for (int j = n2 - 1; j >= 0; --j) {
+        for (int j = n2 - 1; j >= 0; --j)
+        {
             int d2 = v2[j] - '0';
             int sum = d1 * d2 + res[i + j + 1] + carry;
             carry = sum / 10;
@@ -361,8 +418,10 @@ std::string LongArithmetic::mulUnsigned(const std::string& v1, const std::string
 
     std::string result;
     bool leadingZero = true;
-    for (int d : res) {
-        if (d == 0 && leadingZero) continue;
+    for (int d : res)
+    {
+        if (d == 0 && leadingZero)
+            continue;
         leadingZero = false;
         result.push_back('0' + d);
     }

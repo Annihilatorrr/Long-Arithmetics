@@ -2,22 +2,16 @@
 #include "longarithmetic.h"
 
 class LongArithmeticMultiplicationTest
-    : public ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>> {
+    : public ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>
+{
 protected:
     LongArithmetic la;
 };
 
-TEST_P(LongArithmeticMultiplicationTest, Multiply) {
+TEST_P(LongArithmeticMultiplicationTest, Multiply)
+{
     auto [a, b, expected] = GetParam();
     EXPECT_EQ(la.mul(a, b), expected);
-}
-
-std::string MulTestName(
-    const ::testing::TestParamInfo<LongArithmeticMultiplicationTest::ParamType>& info) {
-    auto [a, b, expected] = info.param;
-    std::string name = "Mul_" + a + "_x_" + b + "_eq_" + expected;
-    for (char& c : name) if (!isalnum(static_cast<unsigned char>(c))) c = '_';
-    return name;
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -73,7 +67,4 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("123456789", "987654321", "121932631112635269"),
         std::make_tuple("-123456789", "987654321", "-121932631112635269"),
         std::make_tuple("123456789", "-987654321", "-121932631112635269"),
-        std::make_tuple("-123456789", "-987654321", "121932631112635269")
-    ),
-    MulTestName
-);
+        std::make_tuple("-123456789", "-987654321", "121932631112635269")));

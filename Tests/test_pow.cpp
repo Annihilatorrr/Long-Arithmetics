@@ -1,9 +1,12 @@
 #include <gtest/gtest.h>
 #include "longarithmetic.h"
 
-class LongArithmeticPowTest : public ::testing::TestWithParam<std::tuple<std::string, int, std::string>> {};
+class LongArithmeticPowTest : public ::testing::TestWithParam<std::tuple<std::string, int, std::string>>
+{
+};
 
-TEST_P(LongArithmeticPowTest, ParameterizedPow) {
+TEST_P(LongArithmeticPowTest, ParameterizedPow)
+{
     LongArithmetic la;
     auto [base, exponent, expected] = GetParam();
     std::string result = la.pow(base, exponent);
@@ -11,7 +14,7 @@ TEST_P(LongArithmeticPowTest, ParameterizedPow) {
 }
 
 INSTANTIATE_TEST_SUITE_P(
-    PowTests,
+    PowCases,
     LongArithmeticPowTest,
     ::testing::Values(
         std::make_tuple("0", 0, "1"),
@@ -38,12 +41,9 @@ INSTANTIATE_TEST_SUITE_P(
 
         std::make_tuple("123456789", 2, "15241578750190521"),
 
-        std::make_tuple("123456789", 3, "1881676371789154860897069"), 
-        std::make_tuple("999999999", 2, "999999998000000001"),         
+        std::make_tuple("123456789", 3, "1881676371789154860897069"),
+        std::make_tuple("999999999", 2, "999999998000000001"),
         std::make_tuple("987654321", 4, "951524275264729222930554919618623681"),
-        std::make_tuple("1000000000", 3, "1000000000000000000000000000"), 
+        std::make_tuple("1000000000", 3, "1000000000000000000000000000"),
         std::make_tuple("3141592653589793238462643383279", 2,
-            "9869604401089358618834490999872991420714831834895839696791841")
-    )
-);
-
+                        "9869604401089358618834490999872991420714831834895839696791841")));

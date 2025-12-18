@@ -1,20 +1,25 @@
 #include <gtest/gtest.h>
 #include "longarithmetic.h"
 
-struct CompareTestCase {
+struct CompareTestCase
+{
     std::string lhs;
     std::string rhs;
     int expected; // -1, 0, 1
 };
 
-inline void PrintTo(const CompareTestCase& param, std::ostream* os) {
+inline void PrintTo(const CompareTestCase &param, std::ostream *os)
+{
     *os << "(\"" << param.lhs << "\", \"" << param.rhs << "\", expected=" << param.expected << ")";
 }
 
 class LongArithmeticComparisonTest
-    : public ::testing::TestWithParam<CompareTestCase> {};
+    : public ::testing::TestWithParam<CompareTestCase>
+{
+};
 
-TEST_P(LongArithmeticComparisonTest, CompareValues) {
+TEST_P(LongArithmeticComparisonTest, CompareValues)
+{
     LongArithmetic la;
     auto param = GetParam();
     int result = la.compare(param.lhs.c_str(), param.rhs.c_str());
@@ -22,7 +27,7 @@ TEST_P(LongArithmeticComparisonTest, CompareValues) {
 }
 
 INSTANTIATE_TEST_SUITE_P(
-    AllCases,
+    ComparisonCases,
     LongArithmeticComparisonTest,
     ::testing::Values(
         // Positive vs Positive
@@ -48,6 +53,4 @@ INSTANTIATE_TEST_SUITE_P(
         CompareTestCase{"-123", "123", -1},
 
         // Positive vs Negative
-        CompareTestCase{"123", "-2", 1}
-    )
-);
+        CompareTestCase{"123", "-2", 1}));

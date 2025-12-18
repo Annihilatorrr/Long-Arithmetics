@@ -3,8 +3,9 @@ add_executable(LongArithmeticTests
     test_add.cpp
     test_mul.cpp
     test_pow.cpp
+    test_factorial.cpp
     test_compare.cpp
-    test_sub_positive.cpp
+    test_sub.cpp
 )
 
 target_link_libraries(LongArithmeticTests
