@@ -1,6 +1,6 @@
 add_library(LongArithmeticLib SHARED
-    LongArithmetic.H
-    LongArithmetic.cpp
+    longarithmetic.h
+    longarithmetic.cpp
 )
 
 target_include_directories(LongArithmeticLib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
