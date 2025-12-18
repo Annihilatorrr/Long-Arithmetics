@@ -1,7 +1,11 @@
 add_executable(LongArithmeticTests
     tests_main.cpp
-    test_add_positive.cpp
-    test_add_negative.cpp
+    test_add.cpp
+    test_mul.cpp
+    test_pow.cpp
+    test_factorial.cpp
+    test_compare.cpp
+    test_sub.cpp
 )
 
 target_link_libraries(LongArithmeticTests
