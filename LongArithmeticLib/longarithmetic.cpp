@@ -34,7 +34,7 @@ static void normalizeInteger(std::string& value)
 LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult) const
 {
     std::string result;
-    result.reserve(std::max(v1.size(), v2.size()) + 1 + negativeResult ? 1 : 0); // максимум + 1 на перенос
+    result.reserve(std::max(v1.size(), v2.size()) + 1 + (negativeResult ? 1 : 0)); // максимум + 1 на перенос
 
     int carry = 0;
     int i = static_cast<int>(v1.size()) - 1;
@@ -346,8 +346,9 @@ LIBRARY_API std::string LongArithmetic::pow(const std::string& v1, int n) const
         if (exponent % 2 == 1)
             result = mulUnsigned(result, current_base);
 
-        current_base = mulUnsigned(current_base, current_base);
         exponent /= 2;
+        if (exponent > 0)
+            current_base = mulUnsigned(current_base, current_base);
     }
 
     if (isNegative && (n % 2 == 1))
