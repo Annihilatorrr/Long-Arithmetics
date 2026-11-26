@@ -8,7 +8,7 @@ struct CompareTestCase
     int expected; // -1, 0, 1
 };
 
-inline void PrintTo(const CompareTestCase &param, std::ostream *os)
+inline void PrintTo(const CompareTestCase& param, std::ostream* os)
 {
     *os << "(\"" << param.lhs << "\", \"" << param.rhs << "\", expected=" << param.expected << ")";
 }

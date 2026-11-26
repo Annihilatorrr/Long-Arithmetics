@@ -18,10 +18,17 @@ INSTANTIATE_TEST_SUITE_P(
     LongArithmeticPowTest,
     ::testing::Values(
         std::make_tuple("0", 0, "1"),
+        std::make_tuple("-0", 0, "1"),
         std::make_tuple("12345", 0, "1"),
         std::make_tuple("-9876", 0, "1"),
 
         std::make_tuple("0", 1, "0"),
+        std::make_tuple("-0", 1, "0"),
+        std::make_tuple("-000", 1, "0"),
+        std::make_tuple("0005", 1, "5"),
+        std::make_tuple("-0005", 1, "-5"),
+        std::make_tuple("-0", 3, "0"),
+        std::make_tuple("-000", 3, "0"),
         std::make_tuple("12345", 1, "12345"),
         std::make_tuple("-9876", 1, "-9876"),
 
@@ -33,6 +40,7 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple("-5", 4, "625"),
 
         std::make_tuple("-2", 3, "-8"),
+        std::make_tuple("-0005", 3, "-125"),
         std::make_tuple("-3", 5, "-243"),
 
         std::make_tuple("1", 1000, "1"),
