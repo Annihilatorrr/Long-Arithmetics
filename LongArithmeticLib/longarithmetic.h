@@ -9,7 +9,7 @@ class LIBRARY_API LongArithmetic
     std::string subUnsigned(const std::string &v1, const std::string &v2) const;
     std::string mulUnsigned(const std::string &v1, const std::string &v2) const;
 
-public:
+  public:
     std::string add(const std::string &v1, const std::string &v2) const;
     std::string sub(const std::string &v1, const std::string &v2) const;
     std::string mul(const std::string &v1, const std::string &v2) const;

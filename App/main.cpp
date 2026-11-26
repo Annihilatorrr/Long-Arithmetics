@@ -7,13 +7,11 @@
 #include <cstring>
 #include "longarithmetic.h"
 
-
-
 int main()
 {
 
-    const char* v1 = "-5";
-    const char* v2 = "-5";
+    const char *v1 = "-5";
+    const char *v2 = "-5";
     const LongArithmetic la;
     std::string resultw = la.add("0", "0");
     auto result = la.add(v1, v2);
@@ -28,6 +26,4 @@ int main()
     LongArithmetic la;
     la.pow(v1, 3, result.get());
     std::cout << "Answer: " << result << std::endl;*/
-    
 }
-

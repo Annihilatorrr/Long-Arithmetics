@@ -4,7 +4,7 @@
 class LongArithmeticMultiplicationTest
     : public ::testing::TestWithParam<std::tuple<std::string, std::string, std::string>>
 {
-protected:
+  protected:
     LongArithmetic la;
 };
 
