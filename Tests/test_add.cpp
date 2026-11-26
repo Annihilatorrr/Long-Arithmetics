@@ -18,6 +18,10 @@ INSTANTIATE_TEST_SUITE_P(
     AdditionCases,
     LongArithmeticAdditionTest,
     ::testing::Values(
+        std::make_tuple("0005", "1", "6"),
+        std::make_tuple("-0005", "-0001", "-6"),
+        std::make_tuple("-000", "000", "0"),
+
         std::make_tuple("123", "456", "579"),                                  // basic + +
         std::make_tuple("12345", "11", "12356"),                               // + +, different lengths
         std::make_tuple("12345", "99", "12444"),                               // + +, carry in tail

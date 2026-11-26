@@ -18,6 +18,10 @@ INSTANTIATE_TEST_SUITE_P(
     SubtractionCases,
     LongArithmeticSubtractionTest,
     ::testing::Values(
+        std::make_tuple("0005", "-1", "6"),
+        std::make_tuple("-0005", "0001", "-6"),
+        std::make_tuple("-000", "000", "0"),
+
         std::make_tuple("456", "123", "333"),                   // + - + => +
         std::make_tuple("123", "123", "0"),                     // x - x => 0
         std::make_tuple("1000", "1", "999"),                    // borrow chain

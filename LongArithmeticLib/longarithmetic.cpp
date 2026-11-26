@@ -18,22 +18,17 @@ static void validateInteger(const std::string& value)
         throw std::invalid_argument("Invalid digit in value");
 }
 
-static std::string stripLeadingZeros(const std::string& str)
+static void normalizeInteger(std::string& value)
 {
-    size_t i = 0;
-    while (i < str.length() && str[i] == '0')
+    const size_t firstDigit = !value.empty() && value.front() == '-';
+    const size_t firstNonZero = value.find_first_not_of('0', firstDigit);
+    if (firstNonZero == std::string::npos)
     {
-        ++i;
+        value = "0";
+        return;
     }
 
-    // Если остались цифры после нулей — вернём хвост
-    if (i < str.length())
-    {
-        return str.substr(i);
-    }
-
-    // Если были только нули — вернуть "0"
-    return "0";
+    value.erase(firstDigit, firstNonZero - firstDigit);
 }
 
 LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult) const
@@ -75,8 +70,8 @@ static int compareValidIntegers(const std::string& v1, const std::string& v2)
     std::string num1 = neg1 ? v1.substr(1) : v1;
     std::string num2 = neg2 ? v2.substr(1) : v2;
 
-    num1 = stripLeadingZeros(num1);
-    num2 = stripLeadingZeros(num2);
+    normalizeInteger(num1);
+    normalizeInteger(num2);
 
     size_t len1 = num1.length();
     size_t len2 = num2.length();
@@ -172,17 +167,6 @@ LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::st
         return isNegative(val) ? val.substr(1) : val;
     };
 
-    auto normalizeZero = [](const std::string& result)
-    {
-        size_t start = (result[0] == '-') ? 1 : 0;
-        for (size_t i = start; i < result.size(); ++i)
-        {
-            if (result[i] != '0')
-                return result;
-        }
-        return std::string("0");
-    };
-
     const bool neg1 = isNegative(v1);
     const bool neg2 = isNegative(v2);
 
@@ -220,7 +204,8 @@ LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::st
             result = subUnsigned(abs2, abs1);
     }
 
-    return normalizeZero(result);
+    normalizeInteger(result);
+    return result;
 }
 
 LIBRARY_API std::string LongArithmetic::sub(const std::string& v1, const std::string& v2) const
@@ -229,19 +214,6 @@ LIBRARY_API std::string LongArithmetic::sub(const std::string& v1, const std::st
     validateInteger(v2);
 
     std::string result;
-
-    auto normalizeZero = [](const std::string& value)
-    {
-        if (value.empty())
-            return std::string("0");
-        size_t start = (value[0] == '-') ? 1 : 0;
-        for (size_t i = start; i < value.size(); ++i)
-        {
-            if (value[i] != '0')
-                return value;
-        }
-        return std::string("0");
-    };
 
     // оба положительные
     if (v1[0] != '-' && v2[0] != '-')
@@ -283,7 +255,8 @@ LIBRARY_API std::string LongArithmetic::sub(const std::string& v1, const std::st
         result = addUnsigned(v1, v2.substr(1));
     }
 
-    return normalizeZero(result);
+    normalizeInteger(result);
+    return result;
 }
 
 std::string LongArithmetic::mul(const std::string& v1, const std::string& v2) const
@@ -316,7 +289,7 @@ LIBRARY_API std::string LongArithmetic::factorial(const std::string& value) cons
     bool isNegative = (value[0] == '-');
     std::string input = isNegative ? value.substr(1) : value;
 
-    input = stripLeadingZeros(input);
+    normalizeInteger(input);
 
     // Treat "-0" as 0, but reject other negative values.
     if (isNegative && input != "0")
@@ -353,14 +326,19 @@ LIBRARY_API std::string LongArithmetic::pow(const std::string& v1, int n) const
 
     const bool isNegative = v1.front() == '-';
     const size_t firstDigit = isNegative;
-    if (v1.find_first_not_of('0', firstDigit) == std::string::npos)
+    const size_t firstNonZero = v1.find_first_not_of('0', firstDigit);
+    if (firstNonZero == std::string::npos)
         return "0";
 
+    std::string current_base = v1.substr(firstNonZero);
     if (n == 1)
-        return v1;
+    {
+        if (isNegative)
+            current_base.insert(current_base.begin(), '-');
+        return current_base;
+    }
 
     std::string result = "1";
-    std::string current_base = v1.substr(firstDigit);
     int exponent = n;
 
     while (exponent > 0)
