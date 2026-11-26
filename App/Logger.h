@@ -86,6 +86,25 @@ namespace logger
             }
         }
 
+        template <typename... Args>
+        inline std::string formatMessage(std::string_view fmt, const Args &...args)
+        {
+            const std::string format(fmt);
+            const int length = std::snprintf(nullptr, 0, format.c_str(), args...);
+            if (length >= 0)
+            {
+                std::string message(static_cast<std::string::size_type>(length) + 1, '\0');
+                if (std::snprintf(message.data(), message.size(), format.c_str(), args...) == length)
+                {
+                    message.pop_back();
+                    return message;
+                }
+            }
+
+            return "[formatting failed] " + format;
+        }
+
+        // Messages with arguments use printf formatting. Other messages are written as text.
         template <typename Module, typename... Args>
         inline void log(LogLevel level, Module module, std::string_view fmt, Args &&...args)
         {
@@ -94,7 +113,12 @@ namespace logger
                 return;
             }
 
-            ((void)args, ...);
+            std::string message;
+            if constexpr (sizeof...(Args) > 0)
+            {
+                message = formatMessage(fmt, args...);
+                fmt = message;
+            }
 
             std::fprintf(stderr,
                          "[%s][%s][module=%d] %.*s\n",
@@ -102,7 +126,7 @@ namespace logger
                          levelToString(level),
                          static_cast<int>(module),
                          static_cast<int>(fmt.size()),
-                         fmt.data());
+                         fmt.empty() ? "" : fmt.data());
         }
 
     } // namespace details

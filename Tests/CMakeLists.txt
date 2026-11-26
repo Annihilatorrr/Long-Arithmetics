@@ -6,6 +6,7 @@ add_executable(LongArithmeticTests
     test_compare.cpp
     test_sub.cpp
     test_invalid_input.cpp
+    test_logger.cpp
 )
 
 target_link_libraries(LongArithmeticTests
@@ -16,7 +17,12 @@ target_link_libraries(LongArithmeticTests
 
 target_include_directories(LongArithmeticTests PRIVATE
     ${PROJECT_SOURCE_DIR}/LongArithmeticLib
+    ${PROJECT_SOURCE_DIR}/App
 )
+
+if(MSVC)
+    set_source_files_properties(test_logger.cpp PROPERTIES COMPILE_OPTIONS /Zc:preprocessor)
+endif()
 
 
 add_custom_command(TARGET LongArithmeticTests POST_BUILD
