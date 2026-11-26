@@ -327,19 +327,16 @@ LIBRARY_API std::string LongArithmetic::pow(const std::string &v1, int n) const
     if (n == 0)
         return "1";
 
+    const bool isNegative = !v1.empty() && v1.front() == '-';
+    const size_t firstDigit = isNegative;
+    if (v1.size() > firstDigit && v1.find_first_not_of('0', firstDigit) == std::string::npos)
+        return "0";
+
     if (n == 1)
         return v1;
 
-    std::string base = v1;
-    bool isNegative = false;
-    if (!base.empty() && base[0] == '-')
-    {
-        base.erase(0, 1);
-        isNegative = true;
-    }
-
     std::string result = "1";
-    std::string current_base = base;
+    std::string current_base = v1.substr(firstDigit);
     int exponent = n;
 
     while (exponent > 0)
