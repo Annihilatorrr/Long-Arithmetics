@@ -10,7 +10,7 @@ C++ big-integer (long arithmetic) library with a small app and a GoogleTest test
 
 ## Prerequisites
 
-- CMake
+- CMake 3.24 or newer
 - A C++ compiler toolchain
   - Windows: Visual Studio (MSBuild) is recommended
 
