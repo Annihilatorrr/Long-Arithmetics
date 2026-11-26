@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <vector>
 
-static void validateInteger(const std::string &value)
+static void validateInteger(const std::string& value)
 {
     if (value.empty())
         throw std::invalid_argument("Empty value");
@@ -18,7 +18,7 @@ static void validateInteger(const std::string &value)
         throw std::invalid_argument("Invalid digit in value");
 }
 
-static std::string stripLeadingZeros(const std::string &str)
+static std::string stripLeadingZeros(const std::string& str)
 {
     size_t i = 0;
     while (i < str.length() && str[i] == '0')
@@ -36,7 +36,7 @@ static std::string stripLeadingZeros(const std::string &str)
     return "0";
 }
 
-LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string &v1, const std::string &v2, bool negativeResult) const
+LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string& v1, const std::string& v2, bool negativeResult) const
 {
     std::string result;
     result.reserve(std::max(v1.size(), v2.size()) + 1 + negativeResult ? 1 : 0); // максимум + 1 на перенос
@@ -66,7 +66,7 @@ LIBRARY_API std::string LongArithmetic::addUnsigned(const std::string &v1, const
     return result;
 }
 
-static int compareValidIntegers(const std::string &v1, const std::string &v2)
+static int compareValidIntegers(const std::string& v1, const std::string& v2)
 {
     // Обрабатываем знаки
     bool neg1 = (!v1.empty() && v1[0] == '-');
@@ -106,14 +106,14 @@ static int compareValidIntegers(const std::string &v1, const std::string &v2)
     return 0; // Равны
 }
 
-LIBRARY_API int LongArithmetic::compare(const std::string &v1, const std::string &v2) const
+LIBRARY_API int LongArithmetic::compare(const std::string& v1, const std::string& v2) const
 {
     validateInteger(v1);
     validateInteger(v2);
     return compareValidIntegers(v1, v2);
 }
 
-LIBRARY_API void LongArithmetic::reverse(char *result) const
+LIBRARY_API void LongArithmetic::reverse(char* result) const
 {
     const auto length = strlen(result);
     for (int i = 0; i < length / 2; ++i)
@@ -124,10 +124,10 @@ LIBRARY_API void LongArithmetic::reverse(char *result) const
     }
 }
 
-LIBRARY_API void LongArithmetic::addReversedAndAssign(char *v1, const char *v2) const
+LIBRARY_API void LongArithmetic::addReversedAndAssign(char* v1, const char* v2) const
 {
-    char *ptr1 = v1;
-    const char *ptr2 = v2;
+    char* ptr1 = v1;
+    const char* ptr2 = v2;
     unsigned char mem = 0;
 
     while (*ptr2 != 0)
@@ -157,22 +157,22 @@ LIBRARY_API void LongArithmetic::addReversedAndAssign(char *v1, const char *v2) 
     }
 }
 
-LIBRARY_API std::string LongArithmetic::add(const std::string &v1, const std::string &v2) const
+LIBRARY_API std::string LongArithmetic::add(const std::string& v1, const std::string& v2) const
 {
     validateInteger(v1);
     validateInteger(v2);
 
-    auto isNegative = [](const std::string &val)
+    auto isNegative = [](const std::string& val)
     {
         return !val.empty() && val[0] == '-';
     };
 
-    auto stripSign = [=](const std::string &val)
+    auto stripSign = [=](const std::string& val)
     {
         return isNegative(val) ? val.substr(1) : val;
     };
 
-    auto normalizeZero = [](const std::string &result)
+    auto normalizeZero = [](const std::string& result)
     {
         size_t start = (result[0] == '-') ? 1 : 0;
         for (size_t i = start; i < result.size(); ++i)
@@ -223,14 +223,14 @@ LIBRARY_API std::string LongArithmetic::add(const std::string &v1, const std::st
     return normalizeZero(result);
 }
 
-LIBRARY_API std::string LongArithmetic::sub(const std::string &v1, const std::string &v2) const
+LIBRARY_API std::string LongArithmetic::sub(const std::string& v1, const std::string& v2) const
 {
     validateInteger(v1);
     validateInteger(v2);
 
     std::string result;
 
-    auto normalizeZero = [](const std::string &value)
+    auto normalizeZero = [](const std::string& value)
     {
         if (value.empty())
             return std::string("0");
@@ -286,7 +286,7 @@ LIBRARY_API std::string LongArithmetic::sub(const std::string &v1, const std::st
     return normalizeZero(result);
 }
 
-std::string LongArithmetic::mul(const std::string &v1, const std::string &v2) const
+std::string LongArithmetic::mul(const std::string& v1, const std::string& v2) const
 {
     validateInteger(v1);
     validateInteger(v2);
@@ -309,7 +309,7 @@ std::string LongArithmetic::mul(const std::string &v1, const std::string &v2) co
     return result;
 }
 
-LIBRARY_API std::string LongArithmetic::factorial(const std::string &value) const
+LIBRARY_API std::string LongArithmetic::factorial(const std::string& value) const
 {
     validateInteger(value);
 
@@ -341,7 +341,7 @@ LIBRARY_API std::string LongArithmetic::factorial(const std::string &value) cons
 #include <string>
 #include <memory>
 
-LIBRARY_API std::string LongArithmetic::pow(const std::string &v1, int n) const
+LIBRARY_API std::string LongArithmetic::pow(const std::string& v1, int n) const
 {
     if (n < 0)
         throw std::invalid_argument("Negative exponent not supported");
@@ -378,7 +378,7 @@ LIBRARY_API std::string LongArithmetic::pow(const std::string &v1, int n) const
     return result;
 }
 
-LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string &v1, const std::string &v2) const
+LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string& v1, const std::string& v2) const
 {
     std::string result;
     int carry = 0;
@@ -417,7 +417,7 @@ LIBRARY_API std::string LongArithmetic::subUnsigned(const std::string &v1, const
     return result;
 }
 
-std::string LongArithmetic::mulUnsigned(const std::string &v1, const std::string &v2) const
+std::string LongArithmetic::mulUnsigned(const std::string& v1, const std::string& v2) const
 {
     int n1 = v1.size();
     int n2 = v2.size();

@@ -7,4 +7,6 @@ AllowShortBlocksOnASingleLine: Never
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
 AllowShortLambdasOnASingleLine: None
+PointerAlignment: Left
+ReferenceAlignment: Left
 SpaceBeforeAssignmentOperators: true

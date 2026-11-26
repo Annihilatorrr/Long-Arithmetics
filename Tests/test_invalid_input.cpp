@@ -8,10 +8,18 @@ TEST(LongArithmeticInvalidInputTest, RejectsMalformedOperands)
 {
     const LongArithmetic arithmetic;
     const std::string invalidOperands[] = {
-        "", "-", "1x", "+3", "--1", " 3", "3 ", std::string("1\0", 2), "\xFF",
+        "",
+        "-",
+        "1x",
+        "+3",
+        "--1",
+        " 3",
+        "3 ",
+        std::string("1\0", 2),
+        "\xFF",
     };
 
-    for (const auto &operand : invalidOperands)
+    for (const auto& operand : invalidOperands)
     {
         SCOPED_TRACE(::testing::PrintToString(operand));
         EXPECT_THROW(arithmetic.add(operand, "1"), std::invalid_argument);

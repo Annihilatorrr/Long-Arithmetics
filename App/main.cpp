@@ -15,8 +15,8 @@ int main()
     LOG_INFO(0, "Long-Arithmetics app: demo for big-integer operations (LongArithmeticLib).");
     LOG_INFO(0, "Build/run this app to try addition/subtraction/multiplication/power/factorial APIs.");
 
-    const char *v1 = "-5";
-    const char *v2 = "-5";
+    const char* v1 = "-5";
+    const char* v2 = "-5";
     const LongArithmetic la;
     std::string resultw = la.add("0", "0");
     auto result = la.add(v1, v2);
