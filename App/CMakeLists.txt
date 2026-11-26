@@ -1,7 +1,11 @@
 set(APP_NAME laapp)
 set(LIB_NAME LongArithmeticLib)
 
-add_executable(${APP_NAME} main.cpp)
+add_executable(${APP_NAME} main.cpp Logger.h)
+
+if(MSVC)
+    target_compile_options(${APP_NAME} PRIVATE /Zc:preprocessor)
+endif()
 
 target_link_libraries(${APP_NAME} PRIVATE ${LIB_NAME})
 

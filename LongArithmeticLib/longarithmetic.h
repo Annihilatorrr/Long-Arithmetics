@@ -10,6 +10,8 @@ class LIBRARY_API LongArithmetic
     std::string mulUnsigned(const std::string &v1, const std::string &v2) const;
 
   public:
+    // Operands use decimal digits with an optional leading '-'.
+    // Malformed operands throw std::invalid_argument.
     std::string add(const std::string &v1, const std::string &v2) const;
     std::string sub(const std::string &v1, const std::string &v2) const;
     std::string mul(const std::string &v1, const std::string &v2) const;
